@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
     <link rel="stylesheet" href="/style.css">
   </head>
-  <body>
+  <body oncopy="return false;">
     <div class="main">
       <h1>Canvas to Discord</h1>
     </div>
@@ -26,14 +26,11 @@
         <button id="pencil" onclick="tool(1)">ペン</button>
         <button id="crayon" onclick="tool(2)">ライター</button>
         <button id="destination-over" onclick="tool(3)">下書き</button>
-        <button id="drow-line" onclick="tool(4)">line</button>
-        <button id="eraser" onclick="tool(5)">消しゴム</button>
-        <button id="delete_canvas" onclick="delete_canvas()">全て削除</button>
+        <button id="eraser" onclick="tool(4)">消しゴム</button>
         <input id="hex" type="color" value="#000000">
 	    </div>
       <div id="item3">
-        <input id="name" onclick="save()" value="Name">
-        <button style="width:100px;" onclick="save()">送信</button>
+        <button style="width:100px;" onclick="save()">save to local</button>
 	    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>

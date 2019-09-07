@@ -5,7 +5,7 @@ var canvas = document.getElementById("draw");
 
 // get canvas 2D context and set it to the correct size
 var ctx = canvas.getContext("2d");
-ctx.canvas.width = 400;
+ctx.canvas.width = 800;
 ctx.canvas.height = 400;
 
 var pen = document.getElementById('pencil');
@@ -21,11 +21,8 @@ function tool(btnNum){
   else if (btnNum == 3){
     ctx.globalCompositeOperation = 'destination-over';
   }
-  else if (btnNum == 4){
-    ctx.lineTo(45,125);
-  }
   // クリックされボタンが消しゴムだったら
-  else if (btnNum == 5){
+  else if (btnNum == 4){
     ctx.globalCompositeOperation = 'destination-out';
   }
 }
@@ -79,14 +76,6 @@ alpha.addEventListener("mousemove",function(){
 var alphaNum = document.getElementById("alpha").value;
 document.getElementById("alphaNum").innerHTML = alphaNum;
 });
-
-function delete_canvas(){
-  ret = confirm('canvasの内容を削除します。');
-  // アラートで「OK」を選んだ時
-  if (ret == true){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-}
 
 function save(){
   const base64 = canvas.toDataURL("image/png"); 
