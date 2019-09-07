@@ -7,14 +7,6 @@ var ctx = canvas.getContext("2d");
 ctx.canvas.width = 800;
 ctx.canvas.height = 400;
 
-socket.on('send history', function (msg) {
-  var image = new Image();
-  image.src = msg;
-  image.onload = function() {
-    ctx.drawImage(image, 0, 0);
-  };
-});
-
 var pen = document.getElementById('pencil');
 var era = document.getElementById('eraser');
 function tool(btnNum){
@@ -88,9 +80,7 @@ alpha.addEventListener("mousemove",function(){
 });
 
 function save(){
-  const base64 = canvas.toDataURL("image/png");
-    base64 = base64.replace("image/png", "image/octet-stream");
-    window.open(canvas.toDataURL('image/png'));
+  window.open(canvas.toDataURL('image/png'));
 }
 
 /*ーーーーーーーーーーー*/
@@ -149,6 +139,14 @@ alpha.addEventListener("touchmove",function(){
   socket.emit("linealpha", {lineAlpha: alphaNum});
 });
 
+socket.on('send history', function (msg) {
+  var image = new Image();
+  image.src = msg;
+  image.onload = function() {
+    canvas.drawImage(image, 0, 40);
+  };
+});
+
 socket.on("draw", function (data) {
   ctx.beginPath();
   ctx.moveTo(data.before, data.before2);
@@ -165,3 +163,4 @@ socket.on("linesize", function (size) {
 socket.on("linealpha", function (alpha) {
   ctx.globalAlpha = alpha.lineAlpha;
 });
+
