@@ -14,6 +14,11 @@ io.sockets.on('connection', function (socket) {
     //console.log(data);
     socket.broadcast.emit("draw", data);
   });
+  
+  socket.on("setting", function (data) {
+    //console.log(data);
+    socket.broadcast.emit("setting", data);
+  });
 });
 
 http.listen(PORT, () => {

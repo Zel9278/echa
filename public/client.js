@@ -34,7 +34,7 @@ canvas.addEventListener("mousemove",function(e) {
   var rect = e.target.getBoundingClientRect();
   ctx.lineWidth = document.getElementById("lineWidth").value;
 	ctx.globalAlpha = document.getElementById("alpha").value/100;
-
+  
   mouseX = e.clientX - rect.left;
   mouseY = e.clientY - rect.top;
   
@@ -66,6 +66,8 @@ canvas.addEventListener("mouseup", function(e){
 });
 
 /*ーーーーーーーーーーー*/
+
+socket.emit("setting", {linesize: document.getElementById("lineNum").innerHTML, linealpha: document.getElementById("alphaNum").innerHTML});
 
 lineWidth.addEventListener("mousemove",function(){
 var lineNum = document.getElementById("lineWidth").value;
@@ -136,6 +138,7 @@ socket.on("draw", function (data) {
   ctx.closePath();
 });
 
-socket.on("lineWidth", function (data) {
-  ctx.lineWidth = data;
+socket.on("setting", function (data) {
+  ctx.lineWidth = data.linesize;
+  ctx.globalAlpha = data.linealpha;
 });
