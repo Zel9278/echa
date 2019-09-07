@@ -67,16 +67,16 @@ canvas.addEventListener("mouseup", function(e){
 
 /*ーーーーーーーーーーー*/
 
-socket.emit("setting", {linesize: document.getElementById("lineNum").innerHTML, linealpha: document.getElementById("alphaNum").innerHTML});
-
 lineWidth.addEventListener("mousemove",function(){
-var lineNum = document.getElementById("lineWidth").value;
-document.getElementById("lineNum").innerHTML = lineNum;
+  var lineNum = document.getElementById("lineWidth").value;
+  document.getElementById("lineNum").innerHTML = lineNum;
+  socket.emit("linesize", {linesize: lineNum});
 });
 
 alpha.addEventListener("mousemove",function(){
-var alphaNum = document.getElementById("alpha").value;
-document.getElementById("alphaNum").innerHTML = alphaNum;
+  var alphaNum = document.getElementById("alpha").value;
+  document.getElementById("alphaNum").innerHTML = alphaNum;
+  socket.emit("linealpha", {linealpha: alphaNum});
 });
 
 function save(){
@@ -138,7 +138,10 @@ socket.on("draw", function (data) {
   ctx.closePath();
 });
 
-socket.on("setting", function (data) {
-  ctx.lineWidth = data.linesize;
-  ctx.globalAlpha = data.linealpha;
+socket.on("linesize", function (size) {
+  ctx.lineWidth = size.linesize;
+});
+
+socket.on("linealpha", function (alpha) {
+  ctx.globalAlpha = alpha.linealpha;
 });
