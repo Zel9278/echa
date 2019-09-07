@@ -76,7 +76,7 @@ lineWidth.addEventListener("mousemove",function(){
 alpha.addEventListener("mousemove",function(){
   var alphaNum = document.getElementById("alpha").value;
   document.getElementById("alphaNum").innerHTML = alphaNum;
-  socket.emit("linealpha", {linealpha: alphaNum});
+  socket.emit("linealpha", {lineAlpha: alphaNum});
 });
 
 function save(){
@@ -138,7 +138,7 @@ lineWidth.addEventListener("touchmove",function(){
 alpha.addEventListener("touchmove",function(){
   var alphaNum = document.getElementById("alpha").value;
   document.getElementById("alphaNum").innerHTML = alphaNum;
-  socket.emit("linealpha", {linealpha: alphaNum});
+  socket.emit("linealpha", {lineAlpha: alphaNum});
 });
 
 socket.on("draw", function (data) {
@@ -155,5 +155,5 @@ socket.on("linesize", function (size) {
 });
 
 socket.on("linealpha", function (alpha) {
-  ctx.globalAlpha = alpha.linealpha;
+  ctx.globalAlpha = alpha.lineAlpha;
 });
