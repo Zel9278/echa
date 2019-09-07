@@ -1,7 +1,27 @@
 // set canvas id to variable
 var canvas = document.getElementById("draw");
-
-//https://discordapp.com/api/oauth2/authorize?client_id=619374679446257685&redirect_uri=https%3A%2F%2Fcanvas-to-discord.ced-black.work&response_type=code&scope=identify%20guilds%20connections
+$(function() {
+    var offset = 5;
+    var fromX;
+    var fromY;
+    var drawFlag = false;
+    var context = $("canvas").get(0).getContext('2d');
+    var socket = io.connect('https://echa.glitch.me');
+ 
+    // サーバからメッセージ受信
+    socket.on('send user', function (msg) {
+        context.strokeStyle = msg.color;
+        context.lineWidth = 2;
+        context.beginPath();
+        context.moveTo(msg.fx, msg.fy);
+        context.lineTo(msg.tx, msg.ty);
+        context.stroke();
+        context.closePath(); 
+    });
+ 
+    socket.on('clear user', function () {
+        context.clearRect(0, 0, $('canvas').width(), $('canvas').height());
+    });
 
 // get canvas 2D context and set it to the correct size
 var ctx = canvas.getContext("2d");
@@ -47,6 +67,7 @@ canvas.addEventListener("mousemove",function(e) {
     ctx.lineCap = "round";
     ctx.strokeStyle = color;
     ctx.stroke();
+    socket.emit('server send', { fx:fromX, fy:fromY, tx:toX, ty:toY, color:context.strokeStyle });
     mouseX1 = mouseX;
     mouseY1 = mouseY;
   }
@@ -78,8 +99,9 @@ document.getElementById("alphaNum").innerHTML = alphaNum;
 });
 
 function save(){
-  const base64 = canvas.toDataURL("image/png"); 
-
+  const base64 = canvas.toDataURL("image/png");
+    base64 = base64.replace("image/png", "image/octet-stream");
+    window.open(base64,"save");
 }
 
 /*ーーーーーーーーーーー*/
@@ -120,7 +142,9 @@ canvas.addEventListener("touchmove",function(e){
 		ctx.lineCap="round";
     ctx.strokeStyle = color;
 		ctx.stroke();
+    socket.emit('server send', { fx:fromX, fy:fromY, tx:toX, ty:toY, color:context.strokeStyle });
 		finger[i].x1=finger[i].x;
 		finger[i].y1=finger[i].y;
   }
+});
 });
