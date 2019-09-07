@@ -82,7 +82,7 @@ alpha.addEventListener("mousemove",function(){
 function save(){
   const base64 = canvas.toDataURL("image/png");
     base64 = base64.replace("image/png", "image/octet-stream");
-    window.open(base64,"save");
+    window.open(canvas.toDataURL('image/png'));
 }
 
 /*ーーーーーーーーーーー*/
