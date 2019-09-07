@@ -1,14 +1,6 @@
 // set canvas id to variable
 var canvas = document.getElementById("draw");
-$(function() {
-  var socket = io.connect('http://localhost:3000');
-  socket.on('send user', function (msg) {
-    
-    });
- 
-    socket.on('clear user', function () {
-        ctx.clearRect(0, 0, $('canvas').width(), $('canvas').height());
-    });
+var socket = io.connect("/");
 
 // get canvas 2D context and set it to the correct size
 var ctx = canvas.getContext("2d");
@@ -54,7 +46,7 @@ canvas.addEventListener("mousemove",function(e) {
     ctx.lineCap = "round";
     ctx.strokeStyle = color;
     ctx.stroke();
-    socket.emit('server send', { fx:fromX, fy:fromY, tx:toX, ty:toY, color: ctx.strokeStyle });
+    socket.emit("draw", {before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY});
     mouseX1 = mouseX;
     mouseY1 = mouseY;
   }
@@ -83,6 +75,14 @@ document.getElementById("lineNum").innerHTML = lineNum;
 alpha.addEventListener("mousemove",function(){
 var alphaNum = document.getElementById("alpha").value;
 document.getElementById("alphaNum").innerHTML = alphaNum;
+});
+
+socket.on("draw", function (data) {
+  ctx.beginPath();
+  ctx.moveTo(data.before, data.before2);
+  ctx.lineTo(data.after, data.after2);
+  ctx.stroke();
+  ctx.closePath();
 });
 
 function save(){
@@ -129,9 +129,8 @@ canvas.addEventListener("touchmove",function(e){
 		ctx.lineCap="round";
     ctx.strokeStyle = color;
 		ctx.stroke();
-    socket.emit('server send', { fx:fromX, fy:fromY, tx:toX, ty:toY, color: ctx.strokeStyle });
+    socket.emit("draw", {before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY});
 		finger[i].x1=finger[i].x;
 		finger[i].y1=finger[i].y;
   }
-});
 });
