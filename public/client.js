@@ -32,8 +32,6 @@ var draw = false;
 //マウスの座標を取得する
 canvas.addEventListener("mousemove",function(e) {
   var rect = e.target.getBoundingClientRect();
-  ctx.lineWidth = document.getElementById("lineWidth").value;
-	ctx.globalAlpha = document.getElementById("alpha").value/100;
   
   mouseX = e.clientX - rect.left;
   mouseY = e.clientY - rect.top;
@@ -55,6 +53,8 @@ canvas.addEventListener("mousemove",function(e) {
   //クリックしたら描画をOKの状態にする
   canvas.addEventListener("mousedown",function(e) {
     draw = true;
+    ctx.lineWidth = document.getElementById("lineWidth").value;
+	  ctx.globalAlpha = document.getElementById("alpha").value/100;
     mouseX1 = mouseX;
     mouseY1 = mouseY;
     undoImage = ctx.getImageData(0, 0,canvas.width,canvas.height);
@@ -101,9 +101,9 @@ for(var i=0;i<10;i++){
 
 canvas.addEventListener("touchstart",function(e){
   e.preventDefault();
-	var rect = e.target.getBoundingClientRect();
 	ctx.lineWidth = document.getElementById("lineWidth").value;
 	ctx.globalAlpha = document.getElementById("alpha").value/100;
+	var rect = e.target.getBoundingClientRect();
 	for(var i=0;i<finger.length;i++){
 		finger[i].x1 = e.touches[i].clientX-rect.left;
 		finger[i].y1 = e.touches[i].clientY-rect.top;
@@ -127,6 +127,18 @@ canvas.addEventListener("touchmove",function(e){
 		finger[i].x1=finger[i].x;
 		finger[i].y1=finger[i].y;
   }
+});
+
+lineWidth.addEventListener("touchmove",function(){
+  var lineNum = document.getElementById("lineWidth").value;
+  document.getElementById("lineNum").innerHTML = lineNum;
+  socket.emit("linesize", {linesize: lineNum});
+});
+
+alpha.addEventListener("touchmove",function(){
+  var alphaNum = document.getElementById("alpha").value;
+  document.getElementById("alphaNum").innerHTML = alphaNum;
+  socket.emit("linealpha", {linealpha: alphaNum});
 });
 
 socket.on("draw", function (data) {
