@@ -7,6 +7,14 @@ var ctx = canvas.getContext("2d");
 ctx.canvas.width = 800;
 ctx.canvas.height = 400;
 
+socket.on('send history', function (msg) {
+  var image = new Image();
+  image.src = msg;
+  image.onload = function() {
+    ctx.drawImage(image, 0, 0);
+  };
+});
+
 var pen = document.getElementById('pencil');
 var era = document.getElementById('eraser');
 function tool(btnNum){

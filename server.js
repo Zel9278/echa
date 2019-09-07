@@ -10,6 +10,9 @@ app.get('/', function(request, response) {
 });
 
 io.sockets.on('connection', function (socket) {
+  socket.on('send history', function (msg) {
+    socket.emit("send history", msg);
+  });
   socket.on("draw", function (data) {
     //console.log(data);
     socket.broadcast.emit("draw", data);
