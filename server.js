@@ -10,15 +10,10 @@ app.get('/', function(request, response) {
 });
 
 io.sockets.on('connection', function (socket) {
-    socket.on('clear send', function () {
-        socket.emit('clear user');
-    });
-    socket.on('server send', function (msg) {
-        socket.emit('send user', msg);
-    });
-    socket.on('disconnect', function () {
-        io.emit('user disconnected');
-    });
+  socket.on("draw", function (data) {
+    console.log(data);
+    socket.broadcast.emit("draw", data);
+  });
 });
 
 http.listen(PORT, () => {

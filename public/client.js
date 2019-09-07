@@ -1,26 +1,13 @@
 // set canvas id to variable
 var canvas = document.getElementById("draw");
 $(function() {
-    var offset = 5;
-    var fromX;
-    var fromY;
-    var drawFlag = false;
-    var context = $("canvas").get(0).getContext('2d');
-    var socket = io.connect('https://echa.glitch.me');
- 
-    // サーバからメッセージ受信
-    socket.on('send user', function (msg) {
-        context.strokeStyle = msg.color;
-        context.lineWidth = 2;
-        context.beginPath();
-        context.moveTo(msg.fx, msg.fy);
-        context.lineTo(msg.tx, msg.ty);
-        context.stroke();
-        context.closePath(); 
+  var socket = io.connect('http://localhost:3000');
+  socket.on('send user', function (msg) {
+    
     });
  
     socket.on('clear user', function () {
-        context.clearRect(0, 0, $('canvas').width(), $('canvas').height());
+        ctx.clearRect(0, 0, $('canvas').width(), $('canvas').height());
     });
 
 // get canvas 2D context and set it to the correct size
@@ -67,7 +54,7 @@ canvas.addEventListener("mousemove",function(e) {
     ctx.lineCap = "round";
     ctx.strokeStyle = color;
     ctx.stroke();
-    socket.emit('server send', { fx:fromX, fy:fromY, tx:toX, ty:toY, color:context.strokeStyle });
+    socket.emit('server send', { fx:fromX, fy:fromY, tx:toX, ty:toY, color: ctx.strokeStyle });
     mouseX1 = mouseX;
     mouseY1 = mouseY;
   }
@@ -142,7 +129,7 @@ canvas.addEventListener("touchmove",function(e){
 		ctx.lineCap="round";
     ctx.strokeStyle = color;
 		ctx.stroke();
-    socket.emit('server send', { fx:fromX, fy:fromY, tx:toX, ty:toY, color:context.strokeStyle });
+    socket.emit('server send', { fx:fromX, fy:fromY, tx:toX, ty:toY, color: ctx.strokeStyle });
 		finger[i].x1=finger[i].x;
 		finger[i].y1=finger[i].y;
   }
