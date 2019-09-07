@@ -46,7 +46,7 @@ canvas.addEventListener("mousemove",function(e) {
     ctx.lineCap = "round";
     ctx.strokeStyle = color;
     ctx.stroke();
-    socket.emit("draw", {before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY});
+    socket.emit("draw", {before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY, color: color});
     mouseX1 = mouseX;
     mouseY1 = mouseY;
   }
@@ -75,14 +75,6 @@ document.getElementById("lineNum").innerHTML = lineNum;
 alpha.addEventListener("mousemove",function(){
 var alphaNum = document.getElementById("alpha").value;
 document.getElementById("alphaNum").innerHTML = alphaNum;
-});
-
-socket.on("draw", function (data) {
-  ctx.beginPath();
-  ctx.moveTo(data.before, data.before2);
-  ctx.lineTo(data.after, data.after2);
-  ctx.stroke();
-  ctx.closePath();
 });
 
 function save(){
@@ -129,8 +121,21 @@ canvas.addEventListener("touchmove",function(e){
 		ctx.lineCap="round";
     ctx.strokeStyle = color;
 		ctx.stroke();
-    socket.emit("draw", {before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY});
+    socket.emit("draw", {before: finger[i].x1, before2: finger[i].y1, after: finger[i].x, after2: finger[i].y, color: color});
 		finger[i].x1=finger[i].x;
 		finger[i].y1=finger[i].y;
   }
+});
+
+socket.on("draw", function (data) {
+  ctx.beginPath();
+  ctx.moveTo(data.before, data.before2);
+  ctx.lineTo(data.after, data.after2);
+  ctx.strokeStyle = data.color;
+  ctx.stroke();
+  ctx.closePath();
+});
+
+socket.on("lineWidth", function (data) {
+  ctx.lineWidth = data;
 });
