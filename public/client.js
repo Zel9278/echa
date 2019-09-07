@@ -1,42 +1,137 @@
-// client-side js
-// run by the browser each time your view template is loaded
+// set canvas id to variable
+var canvas = document.getElementById("draw");
 
-console.log('hello world :o');
+//https://discordapp.com/api/oauth2/authorize?client_id=619374679446257685&redirect_uri=https%3A%2F%2Fcanvas-to-discord.ced-black.work&response_type=code&scope=identify%20guilds%20connections
 
-// our default array of dreams
-const dreams = [
-  'Find and count some sheep',
-  'Climb a really tall mountain',
-  'Wash the dishes'
-];
+// get canvas 2D context and set it to the correct size
+var ctx = canvas.getContext("2d");
+ctx.canvas.width = 400;
+ctx.canvas.height = 400;
 
-// define variables that reference elements on our page
-const dreamsList = document.getElementById('dreams');
-const dreamsForm = document.forms[0];
-const dreamInput = dreamsForm.elements['dream'];
-
-// a helper function that creates a list item for a given dream
-const appendNewDream = function(dream) {
-  const newListItem = document.createElement('li');
-  newListItem.innerHTML = dream;
-  dreamsList.appendChild(newListItem);
+var pen = document.getElementById('pencil');
+var era = document.getElementById('eraser');
+function tool(btnNum){
+  // クリックされボタンが鉛筆だったら
+  if (btnNum == 1){
+    ctx.globalCompositeOperation = 'source-over';
+  }
+  else if (btnNum == 2){
+    ctx.globalCompositeOperation = 'lighter';
+  }
+  else if (btnNum == 3){
+    ctx.globalCompositeOperation = 'destination-over';
+  }
+  else if (btnNum == 4){
+    ctx.lineTo(45,125);
+  }
+  // クリックされボタンが消しゴムだったら
+  else if (btnNum == 5){
+    ctx.globalCompositeOperation = 'destination-out';
+  }
 }
 
-// iterate through every dream and add it to our page
-dreams.forEach( function(dream) {
-  appendNewDream(dream);
+var mouse = {x:0,y:0,x1:0,y1:0,color: 'white'};
+var draw = false;
+
+//マウスの座標を取得する
+canvas.addEventListener("mousemove",function(e) {
+  var rect = e.target.getBoundingClientRect();
+  ctx.lineWidth = document.getElementById("lineWidth").value;
+	ctx.globalAlpha = document.getElementById("alpha").value/100;
+
+  mouseX = e.clientX - rect.left;
+  mouseY = e.clientY - rect.top;
+  
+  var color = document.getElementById("hex").value;
+  if(draw === true) {
+    ctx.beginPath();
+    ctx.moveTo(mouseX1,mouseY1);
+    ctx.lineTo(mouseX,mouseY);
+    ctx.lineCap = "round";
+    ctx.strokeStyle = color;
+    ctx.stroke();
+    mouseX1 = mouseX;
+    mouseY1 = mouseY;
+  }
 });
 
-// listen for the form to be submitted and add a new dream when it is
-dreamsForm.onsubmit = function(event) {
-  // stop our form submission from refreshing the page
-  event.preventDefault();
+  //クリックしたら描画をOKの状態にする
+  canvas.addEventListener("mousedown",function(e) {
+    draw = true;
+    mouseX1 = mouseX;
+    mouseY1 = mouseY;
+    undoImage = ctx.getImageData(0, 0,canvas.width,canvas.height);
+});
 
-  // get dream value and add it to the list
-  dreams.push(dreamInput.value);
-  appendNewDream(dreamInput.value);
+//クリックを離したら、描画を終了する
+canvas.addEventListener("mouseup", function(e){
+  draw = false;
+});
 
-  // reset form 
-  dreamInput.value = '';
-  dreamInput.focus();
-};
+/*ーーーーーーーーーーー*/
+
+lineWidth.addEventListener("mousemove",function(){
+var lineNum = document.getElementById("lineWidth").value;
+document.getElementById("lineNum").innerHTML = lineNum;
+});
+
+alpha.addEventListener("mousemove",function(){
+var alphaNum = document.getElementById("alpha").value;
+document.getElementById("alphaNum").innerHTML = alphaNum;
+});
+
+function delete_canvas(){
+  ret = confirm('canvasの内容を削除します。');
+  // アラートで「OK」を選んだ時
+  if (ret == true){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+function save(){
+  const base64 = canvas.toDataURL("image/png"); 
+
+}
+
+/*ーーーーーーーーーーー*/
+
+var finger=new Array;
+for(var i=0;i<10;i++){
+  finger[i]={
+		x:0,y:0,x1:0,y1:0,
+		color:"rgb("
+		+Math.floor(Math.random()*16)*15+","
+		+Math.floor(Math.random()*16)*15+","
+		+Math.floor(Math.random()*16)*15
+		+")"
+	};
+}
+
+canvas.addEventListener("touchstart",function(e){
+  e.preventDefault();
+	var rect = e.target.getBoundingClientRect();
+	ctx.lineWidth = document.getElementById("lineWidth").value;
+	ctx.globalAlpha = document.getElementById("alpha").value/100;
+	for(var i=0;i<finger.length;i++){
+		finger[i].x1 = e.touches[i].clientX-rect.left;
+		finger[i].y1 = e.touches[i].clientY-rect.top;
+	}
+});
+
+canvas.addEventListener("touchmove",function(e){
+	e.preventDefault();
+	var rect = e.target.getBoundingClientRect();
+  var color = document.getElementById("hex").value;
+	for(var i=0;i<finger.length;i++){
+		finger[i].x = e.touches[i].clientX-rect.left;
+		finger[i].y = e.touches[i].clientY-rect.top;
+		ctx.beginPath();
+		ctx.moveTo(finger[i].x1,finger[i].y1);
+		ctx.lineTo(finger[i].x,finger[i].y);
+		ctx.lineCap="round";
+    ctx.strokeStyle = color;
+		ctx.stroke();
+		finger[i].x1=finger[i].x;
+		finger[i].y1=finger[i].y;
+  }
+});
