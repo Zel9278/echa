@@ -4,8 +4,8 @@ var socket = io.connect("/");
 
 // get canvas 2D context and set it to the correct size
 var ctx = canvas.getContext("2d");
-ctx.canvas.width = 800;
-ctx.canvas.height = 400;
+ctx.canvas.width = 512;
+ctx.canvas.height = 512;
 
 function tool(btnNum){
   // クリックされボタンが鉛筆だったら
