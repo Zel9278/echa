@@ -7,8 +7,6 @@ var ctx = canvas.getContext("2d");
 ctx.canvas.width = 800;
 ctx.canvas.height = 400;
 
-var pen = document.getElementById('pencil');
-var era = document.getElementById('eraser');
 function tool(btnNum){
   // クリックされボタンが鉛筆だったら
   if (btnNum == 1){
