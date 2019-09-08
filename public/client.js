@@ -144,7 +144,7 @@ socket.on('send history', function (msg) {
   var image = new Image();
   image.src = msg;
   image.onload = function() {
-    canvas.drawImage(image, 0, 40);
+    canvas.drawImage(image, 0, 0);
   };
 });
 
