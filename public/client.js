@@ -52,7 +52,6 @@ canvas.addEventListener("mousemove",function(e) {
   canvas.addEventListener("mousedown",function(e) {
     draw = true;
     ctx.lineWidth = document.getElementById("lineWidth").value;
-	  ctx.globalAlpha = document.getElementById("alpha").value/100;
     mouseX1 = mouseX;
     mouseY1 = mouseY;
     undoImage = ctx.getImageData(0, 0,canvas.width,canvas.height);
@@ -69,12 +68,6 @@ lineWidth.addEventListener("mousemove",function(){
   var lineNum = document.getElementById("lineWidth").value;
   document.getElementById("lineNum").innerHTML = lineNum;
   socket.emit("draw", {linesize: lineNum});
-});
-
-alpha.addEventListener("mousemove",function(){
-  var alphaNum = document.getElementById("alpha").value;
-  document.getElementById("alphaNum").innerHTML = alphaNum;
-  socket.emit("linealpha", {lineAlpha: alphaNum});
 });
 
 function save(){
@@ -99,7 +92,6 @@ for(var i=0;i<10;i++){
 canvas.addEventListener("touchstart",function(e){
   e.preventDefault();
 	ctx.lineWidth = document.getElementById("lineWidth").value;
-	ctx.globalAlpha = document.getElementById("alpha").value/100;
 	var rect = e.target.getBoundingClientRect();
 	for(var i=0;i<finger.length;i++){
 		finger[i].x1 = e.touches[i].clientX-rect.left;
@@ -132,12 +124,6 @@ lineWidth.addEventListener("touchmove",function(){
   socket.emit("linesize", {linesize: lineNum});
 });
 
-alpha.addEventListener("touchmove",function(){
-  var alphaNum = document.getElementById("alpha").value;
-  document.getElementById("alphaNum").innerHTML = alphaNum;
-  socket.emit("linealpha", {lineAlpha: alphaNum});
-});
-
 socket.on('send history', function (msg) {
   var image = new Image();
   image.src = msg;
@@ -154,9 +140,5 @@ socket.on("draw", function (data) {
   ctx.strokeStyle = data.color;
   ctx.stroke();
   ctx.closePath();
-});
-
-socket.on("linealpha", function (alpha) {
-  ctx.globalAlpha = alpha.lineAlpha;
 });
 
