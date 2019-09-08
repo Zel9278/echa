@@ -70,7 +70,7 @@ canvas.addEventListener("mouseup", function(e){
 lineWidth.addEventListener("mousemove",function(){
   var lineNum = document.getElementById("lineWidth").value;
   document.getElementById("lineNum").innerHTML = lineNum;
-  socket.emit("linesize", {linesize: lineNum});
+  socket.emit("draw", {linesize: lineNum});
 });
 
 alpha.addEventListener("mousemove",function(){
@@ -149,16 +149,13 @@ socket.on('send history', function (msg) {
 });
 
 socket.on("draw", function (data) {
+  ctx.lineWidth = data.linesize;
   ctx.beginPath();
   ctx.moveTo(data.before, data.before2);
   ctx.lineTo(data.after, data.after2);
   ctx.strokeStyle = data.color;
   ctx.stroke();
   ctx.closePath();
-});
-
-socket.on("linesize", function (size) {
-  ctx.lineWidth = size.linesize;
 });
 
 socket.on("linealpha", function (alpha) {

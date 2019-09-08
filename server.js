@@ -18,11 +18,6 @@ io.sockets.on('connection', function (socket) {
     socket.broadcast.emit("draw", data);
   });
   
-  socket.on("linesize", function (size) {
-    //console.log(data);
-    socket.broadcast.emit("linesize", size);
-  });
-  
   socket.on("linealpha", function (alpha) {
     //console.log(data);
     socket.broadcast.emit("linealpha", alpha);
