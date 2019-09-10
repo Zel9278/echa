@@ -7,17 +7,9 @@ var ctx = canvas.getContext("2d");
 ctx.canvas.width = 800;
 ctx.canvas.height = 400;
 
-function tool(btnNum){
-  if (btnNum == 1){
-    ctx.globalCompositeOperation = 'source-over';
-  }
-  else if (btnNum == 2){
-    ctx.globalCompositeOperation = 'destination-out';
-  }
-}
-
 var mouse = {x:0,y:0,x1:0,y1:0,color: 'white'};
 var draw = false;
+var tools = '';
 
 //マウスの座標を取得する
 canvas.addEventListener("mousemove",function(e) {
@@ -28,6 +20,19 @@ canvas.addEventListener("mousemove",function(e) {
   var color = document.getElementById("hex").value;
   var lineNum = document.getElementById("lineWidth").value;
   document.getElementById("lineNum").innerHTML = lineNum;
+  
+  
+  function tool(btnNum){
+    if (btnNum == 1){
+      ctx.globalCompositeOperation = 'source-over';
+      tools = 'source-over';
+    }
+    else if (btnNum == 2){
+      ctx.globalCompositeOperation = 'destination-out';
+      tools = 'source-over';
+    }
+  }
+  
   if(draw === true) {
     ctx.beginPath();
     ctx.moveTo(mouseX1,mouseY1);
@@ -35,7 +40,7 @@ canvas.addEventListener("mousemove",function(e) {
     ctx.lineCap = "round";
     ctx.strokeStyle = color;
     ctx.stroke();
-    socket.emit("draw", {linesize: lineNum, before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY, color: color});
+    socket.emit("draw", {linesize: lineNum, tool: tools, before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY, color: color});
     mouseX1 = mouseX;
     mouseY1 = mouseY;
   }
