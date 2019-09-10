@@ -8,11 +8,9 @@ ctx.canvas.width = 800;
 ctx.canvas.height = 400;
 
 function tool(btnNum){
-  // クリックされボタンが鉛筆だったら
   if (btnNum == 1){
     ctx.globalCompositeOperation = 'source-over';
   }
-  // クリックされボタンが消しゴムだったら
   else if (btnNum == 2){
     ctx.globalCompositeOperation = 'destination-out';
   }
