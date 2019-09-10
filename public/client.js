@@ -12,14 +12,8 @@ function tool(btnNum){
   if (btnNum == 1){
     ctx.globalCompositeOperation = 'source-over';
   }
-  else if (btnNum == 2){
-    ctx.globalCompositeOperation = 'lighter';
-  }
-  else if (btnNum == 3){
-    ctx.globalCompositeOperation = 'destination-over';
-  }
   // クリックされボタンが消しゴムだったら
-  else if (btnNum == 4){
+  else if (btnNum == 2){
     ctx.globalCompositeOperation = 'destination-out';
   }
 }

@@ -10,17 +10,15 @@ app.get('/', function(request, response) {
 });
 
 io.sockets.on('connection', function (socket) {
-  socket.on('send history', function (msg) {
-    socket.broadcast.emit("send history", msg);
-  });
+  let canvasImage = {};
   socket.on("draw", function (data) {
-    //console.log(data);
+    console.log(data);
+    canvasImage = data;
     socket.broadcast.emit("draw", data);
   });
   
-  socket.on("linealpha", function (alpha) {
-    //console.log(data);
-    socket.broadcast.emit("linealpha", alpha);
+  socket.on('send history', function (msg) {
+    socket.broadcast.emit("send history", canvasImage);
   });
 });
 
