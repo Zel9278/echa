@@ -10,7 +10,7 @@ app.get('/', function(request, response) {
 });
 
 io.sockets.on('connection', function (socket) {
-  let canvasImage = {};
+  let canvasImage = '';
   socket.on("draw", function (data) {
     canvasImage = data;
     socket.broadcast.emit("draw", data);
@@ -18,6 +18,10 @@ io.sockets.on('connection', function (socket) {
   
   socket.on('send history', function (msg) {
     socket.broadcast.emit("send history", canvasImage);
+  });
+  
+  socket.on('tools', function (msg) {
+    socket.broadcast.emit("tools", msg);
   });
 });
 

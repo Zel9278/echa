@@ -14,12 +14,12 @@ function tool(btnNum){
   if (btnNum == 1){
     ctx.globalCompositeOperation = 'source-over';
     const tool = 'source-over';
-    
-    socket.emit("draw", {tool: tool})
+    socket.emit("tools", {tool: tool})
   }
   else if (btnNum == 2){
     ctx.globalCompositeOperation = 'destination-out';
     const tool = 'destination-out';
+    socket.emit("tools", {tool: tool})
   }
 }
 
@@ -40,7 +40,7 @@ canvas.addEventListener("mousemove",function(e) {
     ctx.lineCap = "round";
     ctx.strokeStyle = color;
     ctx.stroke();
-    socket.emit("draw", {linesize: lineNum, tool: tools, before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY, color: color});
+    socket.emit("draw", {linesize: lineNum, before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY, color: color});
     mouseX1 = mouseX;
     mouseY1 = mouseY;
   }
@@ -104,7 +104,7 @@ canvas.addEventListener("touchmove",function(e){
 		ctx.lineCap="round";
     ctx.strokeStyle = color;
 		ctx.stroke();
-    socket.emit("draw", {linesize: lineNum, tool: tools, before: finger[i].x1, before2: finger[i].y1, after: finger[i].x, after2: finger[i].y, color: color});
+    socket.emit("draw", {linesize: lineNum, before: finger[i].x1, before2: finger[i].y1, after: finger[i].x, after2: finger[i].y, color: color});
 		finger[i].x1=finger[i].x;
 		finger[i].y1=finger[i].y;
   }
@@ -120,7 +120,6 @@ socket.on('send history', function (msg) {
 
 socket.on("draw", function (data) {
   ctx.lineWidth = data.linesize;
-  ctx.globalCompositeOperation = data.tool;
   ctx.beginPath();
   ctx.moveTo(data.before, data.before2);
   ctx.lineTo(data.after, data.after2);
@@ -128,4 +127,9 @@ socket.on("draw", function (data) {
   ctx.stroke();
   ctx.closePath();
 });
+
+socket.on("tools", function (data) {
+  ctx.globalCompositeOperation = data.tool;
+});
+
 
