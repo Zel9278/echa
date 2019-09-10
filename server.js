@@ -12,7 +12,6 @@ app.get('/', function(request, response) {
 io.sockets.on('connection', function (socket) {
   let canvasImage = {};
   socket.on("draw", function (data) {
-    console.log(data);
     canvasImage = data;
     socket.broadcast.emit("draw", data);
   });

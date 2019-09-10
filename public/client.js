@@ -24,11 +24,12 @@ var draw = false;
 //マウスの座標を取得する
 canvas.addEventListener("mousemove",function(e) {
   var rect = e.target.getBoundingClientRect();
-  
   mouseX = e.clientX - rect.left;
   mouseY = e.clientY - rect.top;
   
   var color = document.getElementById("hex").value;
+  var lineNum = document.getElementById("lineWidth").value;
+  document.getElementById("lineNum").innerHTML = lineNum;
   if(draw === true) {
     ctx.beginPath();
     ctx.moveTo(mouseX1,mouseY1);
@@ -36,7 +37,7 @@ canvas.addEventListener("mousemove",function(e) {
     ctx.lineCap = "round";
     ctx.strokeStyle = color;
     ctx.stroke();
-    socket.emit("draw", {before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY, color: color});
+    socket.emit("draw", {linesize: lineNum, before: mouseX1, before2: mouseY1, after: mouseX, after2: mouseY, color: color});
     mouseX1 = mouseX;
     mouseY1 = mouseY;
   }
@@ -54,14 +55,6 @@ canvas.addEventListener("mousemove",function(e) {
 //クリックを離したら、描画を終了する
 canvas.addEventListener("mouseup", function(e){
   draw = false;
-});
-
-/*ーーーーーーーーーーー*/
-
-lineWidth.addEventListener("mousemove",function(){
-  var lineNum = document.getElementById("lineWidth").value;
-  document.getElementById("lineNum").innerHTML = lineNum;
-  socket.emit("draw", {linesize: lineNum});
 });
 
 function save(){
@@ -97,6 +90,8 @@ canvas.addEventListener("touchmove",function(e){
 	e.preventDefault();
 	var rect = e.target.getBoundingClientRect();
   var color = document.getElementById("hex").value;
+  var lineNum = document.getElementById("lineWidth").value;
+  document.getElementById("lineNum").innerHTML = lineNum;
 	for(var i=0;i<finger.length;i++){
 		finger[i].x = e.touches[i].clientX-rect.left;
 		finger[i].y = e.touches[i].clientY-rect.top;
@@ -106,16 +101,10 @@ canvas.addEventListener("touchmove",function(e){
 		ctx.lineCap="round";
     ctx.strokeStyle = color;
 		ctx.stroke();
-    socket.emit("draw", {before: finger[i].x1, before2: finger[i].y1, after: finger[i].x, after2: finger[i].y, color: color});
+    socket.emit("draw", {linesize: lineNum, before: finger[i].x1, before2: finger[i].y1, after: finger[i].x, after2: finger[i].y, color: color});
 		finger[i].x1=finger[i].x;
 		finger[i].y1=finger[i].y;
   }
-});
-
-lineWidth.addEventListener("touchmove",function(){
-  var lineNum = document.getElementById("lineWidth").value;
-  document.getElementById("lineNum").innerHTML = lineNum;
-  socket.emit("linesize", {linesize: lineNum});
 });
 
 socket.on('send history', function (msg) {
