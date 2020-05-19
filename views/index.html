@@ -14,7 +14,7 @@
     </div>
     <!--input id="hex" placeholder="enter hex color"-->
     <div class="box">
-      <canvas id="draw"></canvas>
+      <canvas id="draw">あなたのブラウザはhtml5に対応していません。</canvas>
       <script src="/jquery-1.11.0.min.js"></script>
     </div>
     <div id="item">
@@ -22,8 +22,8 @@
         <p>線の太さ<input type="range" min="1" max="100" value="5" id="lineWidth"><span id="lineNum">5</span></p>
       </div>
       <div id="item2">
-        <button id="pencil" onclick="tool(1)">ペン</button>
-        <button id="eraser" onclick="tool(2)">消しゴム</button>
+        <button id="pencil" onclick="tool(0)">ペン</button>
+        <button id="eraser" onclick="tool(1)">消しゴム</button>
         <input id="hex" type="color" value="#000000">
 	    </div>
       <div id="item3">
@@ -32,6 +32,6 @@
     </div>
     <script src="/jquery.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <pre class="lang:js decode:true " title="javascript-canvas" ><script src="/client.js"></script></pre>
+    <pre class="lang:js decode:true " title="javascript-canvas" ><script src="/client.2.js"></script></pre>
   </body>
 </html>

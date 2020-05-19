@@ -1,8 +1,6 @@
-// set canvas id to variable
 var canvas = document.getElementById("draw");
 var socket = io.connect("/");
 
-// get canvas 2D context and set it to the correct size
 var ctx = canvas.getContext("2d");
 ctx.canvas.width = 800;
 ctx.canvas.height = 400;
@@ -23,7 +21,6 @@ function tool(btnNum){
   }
 }
 
-//マウスの座標を取得する
 canvas.addEventListener("mousemove",function(e) {
   var rect = e.target.getBoundingClientRect();
   mouseX = e.clientX - rect.left;
@@ -46,7 +43,6 @@ canvas.addEventListener("mousemove",function(e) {
   }
 });
 
-  //クリックしたら描画をOKの状態にする
   canvas.addEventListener("mousedown",function(e) {
     draw = true;
     ctx.lineWidth = document.getElementById("lineWidth").value;
@@ -55,13 +51,12 @@ canvas.addEventListener("mousemove",function(e) {
     undoImage = ctx.getImageData(0, 0,canvas.width,canvas.height);
 });
 
-//クリックを離したら、描画を終了する
 canvas.addEventListener("mouseup", function(e){
   draw = false;
 });
 
 function save(){
-  var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+  var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
   window.location.href = image;
 }
 
@@ -131,5 +126,3 @@ socket.on("draw", function (data) {
 socket.on("tools", function (data) {
   ctx.globalCompositeOperation = data.tool;
 });
-
-
