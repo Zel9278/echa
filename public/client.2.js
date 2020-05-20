@@ -1,5 +1,5 @@
 var socket, canvas, ctx, draw;
-var mouseX, mouseY, mouseX1, mouseY1;
+var _mouseX, _mouseY, mouseX, mouseY, mouseX1, mouseY1;
 var isTouch;
 
 /*events*/
@@ -21,7 +21,7 @@ var sio = {
   draw(data) {
     ctx.lineCap = "round";
     ctx.lineWidth = data.linesize;
-    ctx.beginPath();node-dev 
+    ctx.beginPath();
     ctx.moveTo(data.before, data.before2);
     ctx.lineTo(data.after, data.after2);
     ctx.strokeStyle = data.color;
@@ -56,13 +56,23 @@ $("#draw").bind({
   "touchmove mousemove": (e) => {
     e.preventDefault();
     var rect = e.target.getBoundingClientRect();
-    this.mouseX = (isTouch ? e.originalEvent.touches[0].clientX : e.clientX);
-    this.mouseY = (isTouch ? e.originalEvent.touches[0].clientY : e.clientY);
-    mouseX = this.mouseX - rect.left;
-    mouseY = this.mouseY - rect.top;
+    console.log(e);
+    _mouseX = (isTouch ? Math.floor(e.originalEvent.touches[0].clientX) : e.clientX);
+    _mouseY = (isTouch ? Math.floor(e.originalEvent.touches[0].clientY) : e.clientY);
+    mouseX = _mouseX - rect.left;
+    mouseY = _mouseY - rect.top;
     dev_draw.innerHTML = `draw: ${draw}<br>`;
     if(draw === true) {
-      socket.emit("draw", {
+      /*socket.emit("draw", {
+        linesize: 1,
+        before: mouseX1,
+        before2: mouseY1,
+        after: mouseX,
+        after2: mouseY,
+        color: "#000000"
+      });*/
+
+      sio.draw({
         linesize: 1,
         before: mouseX1,
         before2: mouseY1,
@@ -74,8 +84,12 @@ $("#draw").bind({
       mouseY1 = mouseY;
       dev_move.innerHTML = ([
         `isTouch: ${isTouch}`,
-        `x: ${this.mouseX}`,
-        `y: ${this.mouseY}`
+        `_x: ${_mouseX}`,
+        `_y: ${_mouseY}`,
+        `x: ${mouseX}`,
+        `y: ${mouseY}`,
+        `x1: ${mouseX1}`,
+        `y1: ${mouseY1}`
       ]).join("<br>");
     }
   },
@@ -91,6 +105,14 @@ $("#draw").bind({
     e.preventDefault();
     draw = false;
     dev_draw.innerHTML = `draw: ${draw}<br>`;
-    dev_move.innerHTML = `isTouch: ${isTouch}`;
+    dev_move.innerHTML = ([
+      `isTouch: ${isTouch}`,
+      `_x: ${_mouseX}`,
+      `_y: ${_mouseY}`,
+      `x: ${mouseX}`,
+      `y: ${mouseY}`,
+      `x1: ${mouseX1}`,
+      `y1: ${mouseY1}`
+    ]).join("<br>");
   }
 });
